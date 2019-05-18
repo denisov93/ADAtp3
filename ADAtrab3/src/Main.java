@@ -13,9 +13,9 @@ public class Main {
         int noise = Integer.parseInt(readIt[3]);
         
         int[] degree = new int[people];
-        for(int i : degree) {
-        	i = Integer.parseInt(getSplited(input)[0]);
-        }
+        for(int i = 0; i<people; i++)
+        	degree[i] = Integer.parseInt(getSplited(input)[0]);
+
         Tale tale = new Tale(degree, people, source, target, noise);
         
         int friendships = Integer.parseInt(getSplited(input)[0]);
@@ -24,11 +24,8 @@ public class Main {
         	tale.addFriendship(getSplited(input));
         }
         
-        
-        
-        //TODO
-        
         result(tale.result());
+        //System.out.println(tale.result());
         input.close();
 	}
 

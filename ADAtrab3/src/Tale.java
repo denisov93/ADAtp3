@@ -12,10 +12,7 @@ public class Tale {
 	int[] length;
 	int[] via;
 	Queue<int[]> connected;
-	int P;
-	int S;
-	int T;
-	int N;
+	int P, S, T, N;
 	public Tale(int[] degree,int people,int source,int target,int noise) {
 		P = people;
 		S = source;
@@ -27,13 +24,18 @@ public class Tale {
 		length = new int[P];
 		via = new int[P];
 		connected = new PriorityQueue<int[]>(P,new CompareLengths());
+		
+		fill();
+	}
+
+	private void fill() {
 		for(int i = 0;i<P;i++) {
 			friends.put(i, new LinkedList<Integer>());
 			selected[i]=false;
 			length[i] = Integer.MAX_VALUE;
 		}
 	}
-
+	
 	public void addFriendship(String[] splited) {
 		int a = Integer.parseInt(splited[0]);
 		int b = Integer.parseInt(splited[1]);
