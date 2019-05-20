@@ -54,7 +54,7 @@ public class Tale {
 	
 	private void dijkstra() {
 		length[S]=0;
-		int[]a = {S,0};
+		int[]a = {S,-1};
 		connected.add(a);
 		do {
 			a = connected.remove();
@@ -68,32 +68,35 @@ public class Tale {
 		for(int i : ls) {   //System.out.println(i);
 			if(!selected[i]) {
 				int newL = 0;
-					if(a[0]==S) { //amigo de source
+					if(a[0]==S) { //amigo de source		
 						newL = 0;
-						noise[i]=degree[a[0]];
+						noise[i] = degree[a[0]];
 					}
+					
 					else {
 						if(a[1]==S) {//amigo de amigo de source
-							newL = length[a[0]];
-							noise[i] = degree[a[1]]*N;
-							
+							newL = degree[a[0]];
+							noise[i] = degree[a[1]]*N+degree[a[0]];							
 						}
 						else { //sem cunha
-							noise[i] = degree[a[1]]*noise[a[0]];
-							newL = noise[a[0]] + degree[a[0]] ;
-						
+							
+								noise[i] = degree[a[1]]*noise[a[0]]+degree[a[0]];
+								newL = noise[a[0]] + degree[a[0]] ;
+							
 						}
 					}
 				
 				if(newL < length[i]) {
 					boolean flag = length[i]<Integer.MAX_VALUE;
-					length[i] = newL;
+					
 					//via[i]=a;
 					if(!flag) {
+						length[i] = newL;
 						int[]b = {i,a[0]};
 						connected.add(b);
 					}
 					else {
+						length[i] = newL;
 						int[]b = {i,a[0]};
 						int[] f = connected.remove();
 						if(i!=f[0])System.out.println("Isto é diferente "+i+" de  "+f[0]);
