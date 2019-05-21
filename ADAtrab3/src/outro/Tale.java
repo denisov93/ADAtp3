@@ -1,6 +1,4 @@
-package outro;
-
-
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,13 +9,12 @@ import java.util.Queue;
 public class Tale {
 
 	Map<Integer,List<Integer>>friends;
-	static final long W = (long)Math.pow(2 , 45);
+	static final BigInteger W = new BigInteger("2").pow(45);
 	int[] degree;
 	boolean[] selected;
-	long[] length;
+	BigInteger[] length;
 	int[] noise;
 	int[] via;
-	int[] steps;
 	Queue<InfoPiece> connected;
 	int P;
 	int S;
@@ -31,9 +28,8 @@ public class Tale {
 		this.degree = degree;
 		friends = new HashMap<>();
 		selected = new boolean[P];
-		length = new long[P];
+		length = new BigInteger[P];
 		via = new int[P];
-		steps = new int[P];
 		this.noise = new int[P];
 		connected = new PriorityQueue<InfoPiece>(P);
 		fill();
@@ -43,7 +39,7 @@ public class Tale {
 		for(int i = 0;i<P;i++) {
 			friends.put(i, new LinkedList<Integer>());
 			selected[i]=false;
-			length[i] = Long.MAX_VALUE;
+			length[i] = W;
 		}
 	}
 
@@ -53,7 +49,7 @@ public class Tale {
 		friends.get(a).add(b);
 		friends.get(b).add(a);
 	}
-	public long result() {
+	public BigInteger result() {
 		dijkstra();
 		
 		return length[T];
@@ -67,48 +63,42 @@ public class Tale {
 		do {
 			a = connected.remove();
 			selected[a.node] = true;
-			long newL = getNoise(a.node, steps[a.node]+1);
+			BigInteger newL = getNoise(a.node);
 			exploreNode(a, newL);
 		}while(!connected.isEmpty() && !selected[T]);
 	}
 
 	private void addSourceFriends() {
 		int pos = S;
-		length[pos]=0;
+		length[pos]=BigInteger.ZERO;
 		via[pos]=S;
-		steps[pos]=0;
 		List<Integer> ls = friends.get(S);
 		for(Integer i : ls) {
-			length[i]=0;
+			length[i]=BigInteger.ZERO;
 			via[i]=S;
-			steps[i]=1;
-			connected.add(new InfoPiece(0L, i));
+			connected.add(new InfoPiece(length[i], i));
 		}
 	}
 	
-	private void exploreNode(InfoPiece a, long newL) {
+	private void exploreNode(InfoPiece a, BigInteger newL) {
 		List<Integer> ls = friends.get(a.node);
 		if(selected[T])
 			return;
 		for(Integer i : ls)
 			if(!selected[i]) {
-				if(newL < length[i]) {
+				if(newL.compareTo(length[i]) < 0) {
 					length[i] = newL;
 					via[i]=a.node;
-					steps[i]=steps[a.node]+1;
 					connected.add(new InfoPiece(newL, i));
 				}
 			}
 	}
 	
-	private long getNoise(int s, int m) {
-		long result = 0;
-		int source = s;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-		result = (length[source] * N + degree[source]) % W;
-		/*for(int i = m-1; i>0; i--) {
-			result += degree[source] * Math.pow(N , (m-1-i)) % W;
-			source = via[source];
-		}*/
+	private BigInteger getNoise(int s) {
+		BigInteger result = BigInteger.ZERO;
+		int source = s;  
+		result = (length[source].multiply(BigInteger.valueOf(N)).add(BigInteger.valueOf(degree[source])))
+				.mod(W);
 		return result;
 	}
 }

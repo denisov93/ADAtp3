@@ -1,19 +1,18 @@
-package outro;
-
+import java.math.BigInteger;
 
 public class InfoPiece implements Comparable<InfoPiece>{
 
-	long length;
+	BigInteger length;
 	int node;
 	
-	public InfoPiece(long length, int node) {
+	public InfoPiece(BigInteger length, int node) {
 		this.length = length;
 		this.node = node;
 	}
 	
 
 	public int compareTo(InfoPiece arg0) {
-		return (this.length==arg0.length) ? 0 : this.length<arg0.length ? -1 : 0;
+		return length.compareTo(arg0.length);
 	}
 
 }
