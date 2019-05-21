@@ -61,11 +61,9 @@ public class Tale {
 	}
 	
 	private void dijkstra() {
-		length[S]=0;
-		via[S]=S;
-		steps[S]=0;
-		InfoPiece a = new InfoPiece(0L,S);
-		connected.add(a);
+		addSourceFriends();
+		InfoPiece a;
+
 		do {
 			a = connected.remove();
 			selected[a.node] = true;
@@ -74,8 +72,22 @@ public class Tale {
 		}while(!connected.isEmpty() && !selected[T]);
 	}
 
+	private void addSourceFriends() {
+		int pos = S;
+		length[pos]=0;
+		via[pos]=S;
+		steps[pos]=0;
+		List<Integer> ls = friends.get(S);
+		for(Integer i : ls) {
+			length[i]=0;
+			via[i]=S;
+			steps[i]=1;
+			connected.add(new InfoPiece(0L, i));
+		}
+	}
+	
 	private void exploreNode(InfoPiece a, long newL) {
-		List<Integer> ls = friends.get(a.node);;
+		List<Integer> ls = friends.get(a.node);
 		if(selected[T])
 			return;
 		for(Integer i : ls)
@@ -91,14 +103,12 @@ public class Tale {
 	
 	private long getNoise(int s, int m) {
 		long result = 0;
-		int source = s;
-
-		if(m<2)
-			return 0;
-		for(int i = m-1; i>0; i--) {
+		int source = s;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+		result = (length[source] * N + degree[source]) % W;
+		/*for(int i = m-1; i>0; i--) {
 			result += degree[source] * Math.pow(N , (m-1-i)) % W;
 			source = via[source];
-		}
+		}*/
 		return result;
 	}
 }
