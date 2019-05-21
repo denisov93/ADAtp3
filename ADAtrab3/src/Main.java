@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 
 public class Main {
 
@@ -12,9 +13,9 @@ public class Main {
         int target = Integer.parseInt(readIt[2]);
         int noise = Integer.parseInt(readIt[3]);
         
-        int[] degree = new int[people];
+        BigInteger[] degree = new BigInteger[people];
         for(int i = 0; i<people; i++)
-        	degree[i] = Integer.parseInt(getSplited(input)[0]);
+        	degree[i] = BigInteger.valueOf(Integer.parseInt(getSplited(input)[0]));
 
         Tale tale = new Tale(degree, people, source, target, noise);
         
@@ -24,7 +25,6 @@ public class Main {
         	tale.addFriendship(getSplited(input));
         }
         
-        //result(tale.result());
         System.out.println(tale.result());
         input.close();
 	}
@@ -32,5 +32,5 @@ public class Main {
     static private String[] getSplited(BufferedReader input) throws IOException{
         return input.readLine().split(" ");
     }
-    
+ 
 }
