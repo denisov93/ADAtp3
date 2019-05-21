@@ -8,9 +8,10 @@ import java.util.Queue;
 public class Tale {
 
 	Map<Integer,List<Integer>>friends;
+	static final long W = (long)Math.pow(2, 45);
 	int[] degree;
 	boolean[] selected;
-	int[] length;
+	long[] length;
 	int[] noise;
 	int[] via;
 	Queue<int[]> connected;
@@ -26,14 +27,14 @@ public class Tale {
 		this.degree = degree;
 		friends = new HashMap<Integer,List<Integer>>();
 		selected = new boolean[P];
-		length = new int[P];
+		length = new long[P];
 		via = new int[P];
 		this.noise = new int[P];
 		connected = new PriorityQueue<int[]>(P,new CompareLengths());
 		for(int i = 0;i<P;i++) {
 			friends.put(i, new LinkedList<Integer>());
 			selected[i]=false;
-			length[i] = Integer.MAX_VALUE;
+			length[i] = W;
 		}
 	}
 
@@ -45,10 +46,10 @@ public class Tale {
 		
 		
 	}
-	public int[] result() {
+	public long result() {
 		dijkstra();
 		
-		return length;
+		return length[T];
 		
 	}
 	
@@ -67,28 +68,11 @@ public class Tale {
 		List<Integer> ls = friends.get(a[0]);
 		for(int i : ls) {   //System.out.println(i);
 			if(!selected[i]) {
-				int newL = 0;
-					if(a[0]==S) { //amigo de source		
-						newL = 0;
-						noise[i] = degree[a[0]];
-					}
-					
-					else {
-						if(a[1]==S) {//amigo de amigo de source
-							newL = degree[a[0]];
-							noise[i] = degree[a[1]]*N+degree[a[0]];							
-						}
-						else { //sem cunha
-							
-								noise[i] = degree[a[1]]*noise[a[0]]+degree[a[0]];
-								newL = noise[a[0]] + degree[a[0]] ;
-							
-						}
-					}
+				long newL = getLength(a, i) ;
+
 				
 				if(newL < length[i]) {
-					boolean flag = length[i]<Integer.MAX_VALUE;
-					
+					boolean flag = length[i]<W;
 					//via[i]=a;
 					if(!flag) {
 						length[i] = newL;
@@ -109,10 +93,23 @@ public class Tale {
 		}
 	}
 	
-	
-	
-	
-	
-	
+	private long getLength(int[] a, int i) {
+		long result = 0;
+		if(a[0]==S) { //amigo de source		caso base
+			result = 0;
+			noise[i] = degree[a[0]];
+		}
+		else {
+			if(a[1]==S) {//amigo de amigo de source
+				result = degree[a[0]];
+				noise[i] = degree[a[1]]*N+degree[a[0]];							
+			}
+			else { //sem cunha
+					noise[i] = degree[a[1]]*noise[a[0]]+degree[a[0]];
+					result = noise[a[0]] + degree[a[0]] ;
+			}
+		}
+		return result;
+	}
 	
 }

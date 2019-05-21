@@ -1,3 +1,5 @@
+package outro;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -32,5 +34,5 @@ public class Main {
     static private String[] getSplited(BufferedReader input) throws IOException{
         return input.readLine().split(" ");
     }
-    
+ 
 }
